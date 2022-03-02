@@ -1,5 +1,5 @@
 const one = () => {
-    console.log("one1");
+    console.log("one");
 }
 
 export default one
