@@ -1,3 +1,2 @@
 import timer from "./modules/timer";
-
-timer('04march 2022 01:11')
+timer('05 march 2022 15:21')
