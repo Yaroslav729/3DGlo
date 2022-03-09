@@ -3,8 +3,8 @@ const modal = () => {
     const buttons = document.querySelectorAll('.popup-btn')
     const closeBtn = document.querySelector('.popup-close')
     const popupContent = document.querySelector('.popup-content')
-    const width = document.documentElement.clientWidth
-
+    const width = window.matchMedia("(max-width:768px)")
+    console.log(width)
         let count = -50;
         let idInterval;
 
@@ -33,9 +33,10 @@ const modal = () => {
 
         buttons.forEach(btn => {
             btn.addEventListener('click', () => {
-                if (width < 768) {
+                if (width.matches) {
+                    popupContent.style.top = 10 + '%'
                     modal.style.display = 'block'
-                }else if (width >768){
+                }else if (!width.matches){
                     flyAnimate()
                 }else {
                     flyAnimateClose()
