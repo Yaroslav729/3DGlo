@@ -8,7 +8,7 @@ const menu = () => {
     menuBtn.addEventListener('click', handleMenu,)
 
     menu.addEventListener('click', (e) => {
-        if (!e.target.matches('menu')) {
+        if (e.target.closest('ul>li>a') || e.target.closest(".close-btn")) {
             handleMenu()
         }
     })
