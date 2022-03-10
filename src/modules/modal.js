@@ -36,7 +36,7 @@ const modal = () => {
                 if (width.matches) {
                     popupContent.style.top = 10 + '%'
                     modal.style.display = 'block'
-                }else if (!width.matches){
+                }else if (!width.){
                     flyAnimate()
                 }else {
                     flyAnimateClose()
