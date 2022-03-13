@@ -6,17 +6,7 @@ const modal = () => {
     const popupContent = document.querySelector('.popup-content')
     const width = window.matchMedia("(max-width:768px)")
     let count = -50;
-
-
-    const flyAnimate = () => {
-
-        idInterval = requestAnimationFrame(flyAnimate)
-
-    }
-
-    const flyAnimateClose = () => {
-
-    }
+    const animation = animate(-50, modal, popupContent)
 
     buttons.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -24,17 +14,16 @@ const modal = () => {
                 popupContent.style.top = 10 + '%'
                 modal.style.display = 'block'
             } else if (!width.matches) {
-                flyAnimate()
+                animation.open()
             } else {
-                flyAnimateClose()
+                animation.close()
             }
         })
-
     })
 
     modal.addEventListener('click', (e) => {
         if (!e.target.closest('.popup-content') || e.target.classList.contains('popup-close'))
-            flyAnimateClose()
+            animation.close()
     })
 
 }

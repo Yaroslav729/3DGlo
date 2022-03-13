@@ -1,23 +1,28 @@
-const animate = (count, modal, popupContent) => {
+function animate(count, modal, popup) {
     let idInterval;
-    count++
+    const flyAnimate = () => {
+        idInterval = requestAnimationFrame(flyAnimate)
+        count++
+
         if (count < 11) {
-            popupContent.style.top = count + '%'
+            popup.style.top = count + '%'
             modal.style.display = 'block'
         } else {
             cancelAnimationFrame(idInterval)
         }
-
-    count--;
-    idInterval = requestAnimationFrame(flyAnimateClose);
-    if (count > -50) {
-        popupContent.style.top = count + '%'
-    } else {
-        cancelAnimationFrame(idInterval)
-        modal.style.display = 'none'
     }
+    const flyAnimateClose = () => {
+        idInterval = requestAnimationFrame(flyAnimateClose);
+        count--;
+        if (count > -50) {
+            popup.style.top = count + '%'
+        } else {
+            cancelAnimationFrame(idInterval)
+            modal.style.display = 'none'
+        }
+    }
+    return {open: flyAnimate, close:flyAnimateClose}
 }
-
 
 
 export {animate}
