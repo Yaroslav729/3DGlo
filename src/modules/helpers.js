@@ -1,23 +1,23 @@
-
-const animate = ({timing, draw, duration}) => {
-
-    let start = performance.now();
-
-    requestAnimationFrame(function animate(time) {
-        // timeFraction изменяется от 0 до 1
-        let timeFraction = (time - start) / duration;
-        if (timeFraction > 1) timeFraction = 1;
-
-        // вычисление текущего состояния анимации
-        let progress = timing(timeFraction);
-
-        draw(progress); // отрисовать её
-
-        if (timeFraction < 1) {
-            requestAnimationFrame(animate);
+const animate = (count, modal, popupContent) => {
+    let idInterval;
+    count++
+        if (count < 11) {
+            popupContent.style.top = count + '%'
+            modal.style.display = 'block'
+        } else {
+            cancelAnimationFrame(idInterval)
         }
 
-    });
+    count--;
+    idInterval = requestAnimationFrame(flyAnimateClose);
+    if (count > -50) {
+        popupContent.style.top = count + '%'
+    } else {
+        cancelAnimationFrame(idInterval)
+        modal.style.display = 'none'
+    }
 }
+
+
 
 export {animate}

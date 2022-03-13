@@ -6,29 +6,16 @@ const modal = () => {
     const popupContent = document.querySelector('.popup-content')
     const width = window.matchMedia("(max-width:768px)")
     let count = -50;
-    let idInterval;
+
 
     const flyAnimate = () => {
-        count++
+
         idInterval = requestAnimationFrame(flyAnimate)
 
-        if (count < 11) {
-            popupContent.style.top = count + '%'
-            modal.style.display = 'block'
-        } else {
-            cancelAnimationFrame(idInterval)
-        }
     }
 
     const flyAnimateClose = () => {
-        count--;
-        idInterval = requestAnimationFrame(flyAnimateClose);
-        if (count > -50) {
-            popupContent.style.top = count + '%'
-        } else {
-            cancelAnimationFrame(idInterval)
-            modal.style.display = 'none'
-        }
+
     }
 
     buttons.forEach(btn => {
@@ -49,15 +36,7 @@ const modal = () => {
         if (!e.target.closest('.popup-content') || e.target.classList.contains('popup-close'))
             flyAnimateClose()
     })
-    animate({
-        duration: 1000,
-        timing(timeFraction) {
-            return timeFraction;
-        },
-        draw(progress) {
-            
-        }
-    });
+
 }
 
 export default modal
