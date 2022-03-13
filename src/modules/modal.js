@@ -1,3 +1,5 @@
+import {animate} from "./helpers";
+
 const modal = () => {
     const modal = document.querySelector('.popup')
     const buttons = document.querySelectorAll('.popup-btn')
@@ -47,7 +49,15 @@ const modal = () => {
         if (!e.target.closest('.popup-content') || e.target.classList.contains('popup-close'))
             flyAnimateClose()
     })
-
+    animate({
+        duration: 1000,
+        timing(timeFraction) {
+            return timeFraction;
+        },
+        draw(progress) {
+            
+        }
+    });
 }
 
 export default modal
