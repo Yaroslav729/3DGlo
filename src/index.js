@@ -7,7 +7,7 @@ import slider from "./modules/slider";
 import calc from "./modules/calc";
 import sendForm from "./modules/sandForm";
 
-timer('15 march 2022 22:16')
+timer('18 march 2022 22:16')
 menu()
 modal()
 calculator()
