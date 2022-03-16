@@ -1,12 +1,30 @@
 import * as events from "events";
 
+const inputs_name = ["user_name", "user_phone", "user_message"];
+const patterns_for_name = [
+    "^[А-Яа-яЁё\\s]+$",
+    "^[\\d\\+\\-\\(\\)]+$",
+    "^[А-Яа-яЁё\\s.,!?\\+\\-]+$",
+];
+
 const sendForm = ({formId, someElem = []}) => {
     const form = document.getElementById(formId)
-
     const statusBlock = document.createElement('div')
+
+
+    inputs_name.forEach((name, i) => {
+        let input = form.querySelector(`[name="${name}"]`);
+        console.log(input);
+        if (input) {
+            input.setAttribute("pattern", patterns_for_name[i]);
+        }
+    });
+
     const loadText = 'Загрузка...'
     const errorText = 'Ошибка...'
     const successText = 'Спасибо! Наш менеджер с вами свяжется'
+
+
 
     const validate = (list) => {
         let success = true
@@ -14,6 +32,8 @@ const sendForm = ({formId, someElem = []}) => {
         return success
 
     }
+
+
 
     const sendData = (data) => {
         return fetch('https://jsonplaceholder.typicode.com/posts', {
