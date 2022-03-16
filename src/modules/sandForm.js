@@ -7,6 +7,7 @@ const patterns_for_name = [
     "^[А-Яа-яЁё\\s.,!?\\+\\-]+$",
 ];
 
+
 const sendForm = ({formId, someElem = []}) => {
     const form = document.getElementById(formId)
     const statusBlock = document.createElement('div')
@@ -25,15 +26,16 @@ const sendForm = ({formId, someElem = []}) => {
     const successText = 'Спасибо! Наш менеджер с вами свяжется'
 
 
-
     const validate = (list) => {
         let success = true
-
+        list.forEach(input => {
+            if (!input.value) {
+                success = false
+            }
+        })
         return success
 
     }
-
-
 
     const sendData = (data) => {
         return fetch('https://jsonplaceholder.typicode.com/posts', {
@@ -44,6 +46,7 @@ const sendForm = ({formId, someElem = []}) => {
             }
         }).then(res => res.json())
     }
+
 
     const submitForm = () => {
         const formElements = form.querySelectorAll('input')
@@ -70,23 +73,26 @@ const sendForm = ({formId, someElem = []}) => {
 
         console.log('submit')
 
-        if (validate(formElements)) {
-            sendData(formBody)
-                .then(data => {
-                    statusBlock.textContent = successText
 
-                    formElements.forEach(input => {
-                        input.value = ''
+
+            if (validate(formElements)) {
+                sendData(formBody)
+                    .then(data => {
+                        statusBlock.textContent = successText
+
+                        formElements.forEach(input => {
+                            input.value = ''
+                        })
                     })
-                })
-                .catch(error => {
-                    statusBlock.textContent = errorText
-                })
-        } else {
-            alert('Данные не валидны!!!')
-        }
-    }
+                    .catch(error => {
+                       statusBlock.textContent = errorText
+                    })
+            } else {
+                alert('Данные не валидны!!!')
+            }
 
+        setTimeout(() => {statusBlock.remove()}, 3000)
+    }
     try {
         if (!form) {
             throw new Error('Верните форму на место, пожалуйста))')
