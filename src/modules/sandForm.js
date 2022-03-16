@@ -1,7 +1,8 @@
 import * as events from "events";
 
-const sendForm = ({formId, someElem = [] }) => {
+const sendForm = ({formId, someElem = []}) => {
     const form = document.getElementById(formId)
+
     const statusBlock = document.createElement('div')
     const loadText = 'Загрузка...'
     const errorText = 'Ошибка...'
@@ -66,17 +67,17 @@ const sendForm = ({formId, someElem = [] }) => {
         }
     }
 
-try {
+    try {
         if (!form) {
             throw new Error('Верните форму на место, пожалуйста))')
         }
-    form.addEventListener('submit', (event) => {
-        event.preventDefault()
+        form.addEventListener('submit', (event) => {
+            event.preventDefault()
 
-        submitForm()
-    })
-} catch (error) {
+            submitForm()
+        })
+    } catch (error) {
         console.log(error.message)
-}
+    }
 }
 export default sendForm
