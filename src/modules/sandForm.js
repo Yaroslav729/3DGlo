@@ -6,104 +6,115 @@ const patterns_for_name = [
     "^[\\d\\+\\-\\(\\)]+$",
     "^[А-Яа-яЁё\\s.,!?\\+\\-]+$",
 ];
+const anchors = document.querySelectorAll('a[href*="#"]');
+for (let anchor of anchors) {
+    anchor.addEventListener("click", function (e) {
+        e.preventDefault();
 
+        const blockID = anchor.getAttribute("href").substr(1);
 
+        document.getElementById(blockID).scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
+    });
+}
 const sendForm = ({formId, someElem = []}) => {
-    const form = document.getElementById(formId)
-    const statusBlock = document.createElement('div')
+    const formKalc = document.querySelectorAll('.calc-block > input');
+    const total = document.getElementById('total')
+    const select = document.querySelector('.calc-type')
+    function formSelekt() {
+        formKalc.forEach(input => {
+            input.value = "";
+        });
+        total.textContent = 0;
+        select.options[0].selected = true
+    }
 
 
+
+    const form = document.getElementById(formId);
+    let errors = [];
+    const statusBlock = document.createElement("div");
+    statusBlock.style.color = "white";
     inputs_name.forEach((name, i) => {
         let input = form.querySelector(`[name="${name}"]`);
-        console.log(input);
         if (input) {
             input.setAttribute("pattern", patterns_for_name[i]);
         }
     });
 
-    const loadText = 'Загрузка...'
-    const errorText = 'Ошибка...'
-    const successText = 'Спасибо! Наш менеджер с вами свяжется'
+    const loadText = "Загрузка...";
+    const errorText = "Ошибка...";
+    const successText = "Спасибо! Наш менеджер с вами свяжется";
 
-
-    const validate = (list) => {
-        let success = true
+    const validate = list => {
+        let success = true;
         list.forEach(input => {
             if (!input.value) {
-                success = false
+                errors.push(input.name.replace(/user_/g, ""));
+                success = false;
             }
-        })
-        return success
+        });
+        return success;
+    };
 
-    }
-
-    const sendData = (data) => {
-        return fetch('https://jsonplaceholder.typicode.com/posts', {
-            method: 'POST',
+    const sendData = data => {
+        return fetch("https://jsonplaceholder.typicode.com/posts", {
+            method: "POST",
             body: JSON.stringify(data),
             headers: {
-                "Content-Type": "application/json"
-            }
-        }).then(res => res.json())
-    }
-
+                "Content-Type": "application/json",
+            },
+        }).then(res => res.json());
+    };
 
     const submitForm = () => {
-        const formElements = form.querySelectorAll('input')
-        const formData = new FormData(form)
-        const formBody = {}
+        const formElements = form.querySelectorAll("input");
+        let formBody = {};
 
-        statusBlock.textContent = loadText
-        form.append(statusBlock)
-
-        formData.forEach((val, key) => {
-            formBody[key] = val
-        })
+        formElements.forEach(key => {
+            let name = key.name;
+            let value = key.value;
+            formBody = {...formBody, [name]: value};
+        });
+        form.after(statusBlock);
 
         someElem.forEach(elem => {
-            const element = document.getElementById(elem.id)
-            console.log(element)
-            if (elem.type === 'block') {
-                formBody[elem.id] = element.textContent
-            } else if (elem.type === 'input') {
-                formBody[elem.id] = element.value
+            const element = document.getElementById(elem.id);
+            if (elem.type === "block") {
+                formBody[elem.id] = element.textContent;
+            } else if (elem.type === "input") {
+                formBody[elem.id] = element.value;
             }
-        })
+        });
 
+        if (validate(formElements)) {
+            statusBlock.textContent = loadText;
+            sendData(formBody)
+                .then(() => {
+                    statusBlock.textContent = successText;
 
-        console.log('submit')
-
-
-
-            if (validate(formElements)) {
-                sendData(formBody)
-                    .then(data => {
-                        statusBlock.textContent = successText
-
-                        formElements.forEach(input => {
-                            input.value = ''
-                        })
-                    })
-                    .catch(error => {
-                       statusBlock.textContent = errorText
-                    })
-            } else {
-                alert('Данные не валидны!!!')
-            }
-
-        setTimeout(() => {statusBlock.remove()}, 3000)
-    }
-    try {
-        if (!form) {
-            throw new Error('Верните форму на место, пожалуйста))')
+                    formElements.forEach(input => {
+                        input.value = "";
+                    });
+                    formSelekt()
+                })
+                .catch(() => {
+                    statusBlock.textContent = errorText;
+                });
+        } else {
+            alert("Данные не валидны!!!\n" + errors.join(", "));
         }
-        form.addEventListener('submit', (event) => {
-            event.preventDefault()
 
-            submitForm()
-        })
-    } catch (error) {
-        console.log(error.message)
-    }
-}
-export default sendForm
+        setTimeout(() => {
+            statusBlock.remove();
+        }, 3000);
+    };
+    form.addEventListener("submit", event => {
+        event.preventDefault();
+
+        submitForm();
+    });
+};
+export default sendForm;
